@@ -62,3 +62,7 @@ target_link_libraries(ska_sign PRIVATE common_deps)
 
 add_executable(slip10 src/slip10.cpp)
 target_link_libraries(slip10 PRIVATE common_deps)
+
+add_executable(keyaccess src/keyaccess.c)
+target_link_libraries(keyaccess PRIVATE common_deps)
+

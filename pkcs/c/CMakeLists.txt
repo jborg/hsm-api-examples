@@ -66,3 +66,6 @@ target_link_libraries(slip10 PRIVATE common_deps)
 add_executable(keyaccess src/keyaccess.c)
 target_link_libraries(keyaccess PRIVATE common_deps)
 
+add_executable(concurrentaccess src/concurrentaccess.c)
+target_link_libraries(concurrentaccess PRIVATE common_deps)
+

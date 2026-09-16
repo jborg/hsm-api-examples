@@ -50,21 +50,22 @@ CK_RV lookup_private_key(CK_SESSION_HANDLE session, CK_UTF8CHAR *label, CK_OBJEC
     };
 
     rv = C_FindObjectsInit(session, template, 2);
-    if (rv != CKR_OK)
-    	return rv;
-
+    if (rv != CKR_OK) {
+        return rv;
+    }
     rv = C_FindObjects(session, objects, 1, &objectCount);
-    if (rv != CKR_OK)
-    	return rv;
+    if (rv != CKR_OK) {
+        return rv;
+    }
     if (objectCount == 0) {
-	fprintf(stderr, "EEEK no private key found with label %s\n", label);
-    	exit(1);
+        fprintf(stderr, "EEEK no private key found with label %s\n", label);
+        exit(1);
     }
     *keyout = objects[0];
     rv = C_FindObjectsFinal(session);
-    if (rv != CKR_OK)
-    	return rv;
-
+    if (rv != CKR_OK) {
+        return rv;
+    }
     return rv;
 }
 
@@ -84,42 +85,42 @@ void fake_sign_zone() {
     rv = C_OpenSession(slotId, flags, NULL_PTR, NULL_PTR, &session);
     if (rv != CKR_OK)
     {
-	fprintf(stderr, "C_OpenSession failed: %d\n", rv);
-    	exit(1);
+        fprintf(stderr, "C_OpenSession failed: %d\n", rv);
+        exit(1);
     }
 
     // Step 2: Lookup key
     rv = lookup_private_key(session, key_label, &key);
     if (rv != CKR_OK)
     {
-	fprintf(stderr, "list_private_keys_by_label failed: %d\n", rv);	
-    	exit(1);
+        fprintf(stderr, "list_private_keys_by_label failed: %d\n", rv);
+        exit(1);
     }
 
     // Step 3: Perform N signatures
     int num_sigs = random() % 100;
     for(int i=0; i < num_sigs; i++) {
         rv = C_SignInit(session, &mech, key);
-	if (rv != CKR_OK)
-	{
-	    fprintf(stderr, "C_SignInit failed: %d\n", rv);	
-    	    exit(1);
-	}
-	signatureLen = sizeof(signature);
-	rv = C_Sign(session, message, sizeof(message), signature, &signatureLen);
-	if (rv != CKR_OK)
-	{
-	    fprintf(stderr, "C_Sign failed: %d\n", rv);
-	    exit(1);
-	}
-	record_signature();
+        if (rv != CKR_OK)
+        {
+            fprintf(stderr, "C_SignInit failed: %d\n", rv);
+            exit(1);
+        }
+        signatureLen = sizeof(signature);
+        rv = C_Sign(session, message, sizeof(message), signature, &signatureLen);
+        if (rv != CKR_OK)
+        {
+            fprintf(stderr, "C_Sign failed: %d\n", rv);
+            exit(1);
+        }
+        record_signature();
     }
     // Step 4: Close session
     rv = C_CloseSession(session);
     if (rv != CKR_OK)
     {
-	fprintf(stderr, "C_ClosseSession failed: %d\n", rv);
-        exit(1);	
+        fprintf(stderr, "C_ClosseSession failed: %d\n", rv);
+        exit(1);
     }
 }
 
@@ -164,8 +165,8 @@ int main(int argc, char **argv)
     CK_SESSION_HANDLE session;
 
     if (argc != 3) {
-	fprintf(stderr, "usage: %s <num_theads> <existing_key_label>\n", argv[0]);
-	exit(1);
+        fprintf(stderr, "usage: %s <num_theads> <existing_key_label>\n", argv[0]);
+        exit(1);
     }
 
     int num_threads = atoi(argv[1]);

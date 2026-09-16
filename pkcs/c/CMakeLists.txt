@@ -72,3 +72,6 @@ target_link_libraries(concurrentaccess PRIVATE common_deps)
 add_executable(sessioninfo src/sessioninfo.c)
 target_link_libraries(sessioninfo PRIVATE common_deps)
 
+add_executable(concurrentsignatures src/concurrentsignatures.c)
+target_link_libraries(concurrentsignatures PRIVATE common_deps)
+
